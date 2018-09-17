@@ -1,102 +1,39 @@
 class Sorter {
 	constructor() {
-    this.element = [];
-    this.comparator = "STANDART";
+    this.elementsArr = [];
+    this.comparator = (a , b) => a - b;
 	}
   
 	add(element) {
-		return this.element.push(element);
+		return this.elementsArr.push(element);
 	}
   
 	at(index) {
-		return this.element[index];
+		return this.elementsArr[index];
 	}
   
 	get length() {
-		return this.element.length;
+		return this.elementsArr.length;
 	}
   
 	toArray() {
-		return this.element;
+		return this.elementsArr;
 	}
   
 	sort(indices) {
-		let b = this.element;
+		let elementsArr = this.elementsArr;
 
-		switch (this.comparator) {
-			case "STANDART": 
-				for (let i = 0; i < indices.length; i++) {
-					if (indices[i] < indices[i+1]) {
-						if (b[indices[i]] > b[indices[i+1]]) {
-							var a = b[indices[i+1]];
-							b[indices[i+1]] = b[indices[i]];
-							b[indices[i]] = a;
-							i = -1;
-						}
-					} else {
-						if (b[indices[i]] < b[indices[i+1]]) {
-							var a = b[indices[i+1]];
-							b[indices[i+1]] = b[indices[i]];
-							b[indices[i]] = a;
-							i = -1;
-						}
-					}
-				}
-				return b;
+		let filterElementsArr = elementsArr.filter((element, i) => indices.includes(i)).sort(this.comparator);
 
-			case "REVERSE_COMPARATOR":
-				for (let i = 0; i < indices.length; i++) {
-					if (indices[i] < indices[i+1]) {
-						if (b[indices[i]] < b[indices[i+1]]) {
-							var a = b[indices[i+1]];
-							b[indices[i+1]] = b[indices[i]];
-							b[indices[i]] = a;
-							i = -1;
-						}
-					} else {
-						if (b[indices[i]] > b[indices[i+1]]) {
-							var a = b[indices[i+1]];
-							b[indices[i+1]] = b[indices[i]];
-							b[indices[i]] = a;
-							i = -1;
-						}
-					}
-				} 
-				return b;
-				
-			case "AGE_COMPARATOR": 
-				for (let i = 0; i < indices.length; i++) {
-					if (indices[i] < indices[i+1]) {
-
-						if (b[indices[i]].age > b[indices[i+1]].age) {
-
-							var copy = Object.assign({}, b[indices[i+1]]);
-							var copy2 = Object.assign({}, b[indices[i]]);
-
-							b[indices[i]].age = copy.age;
-							b[indices[i+1]].age = copy2.age;
-
-							i = -1;	
-						}
-					} else {
-						if (b[indices[i]].age < b[indices[i+1]].age) {
-
-							var copy = Object.assign({}, b[indices[i+1]]);
-							var copy2 = Object.assign({}, b[indices[i]]);
-
-							b[indices[i]].age = copy.age;
-							b[indices[i+1]].age = copy2.age;
-
-							i = -1;
-						}
-					}
-				return b; 
-				}			
-		}	
+		return this.elementsArr = elementsArr.map((element, i) => {
+			if (indices.includes(i)) {
+				return filterElementsArr.shift();
+			} else return element;
+		});
 	} 
   
 	setComparator(compareFunction) {
-		this.comparator = compareFunction.name;
+		return this.comparator = compareFunction;
 	}
 }
 
